@@ -1,0 +1,71 @@
+---
+title: "Codebook"
+author: "Yuri-Sh"
+date: "Friday, December 19, 2014"
+output:
+  html_document:
+    keep_md: yes
+---
+
+Feature Selection 
+=================
+
+The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals 
+measured during 6 different activities of 30 different subjects.
+
+These time domain signals (prefix 'TimeDomain' to denote time) were captured at a constant rate of 50 Hz. 
+Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals. 
+Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm. 
+
+In addition a Fast Fourier Transform (FFT) was applied to some of these signals. 
+Note the 'FrequencyDomain' to indicate frequency domain signals. 
+
+The set of variables that were estimated from these signals are: 
+
+ - Mean value (Mean)
+ - Standard deviation (STD)
+ - Weighted average of the frequency components to obtain a mean frequency (MeanFreq)
+
+The data was in addition post-processed:
+for all observations for a given subject and given activity each variable was averaged.
+
+This resulting dataset contains 79 measurements (variables) for each of 6 activities performed by 30 subjects (180 rows).
+
+
+The notation for the variables is defined by the the following convention:
+      <Domain><Type><Measurement/Calculation><Axis/Magnitude><Processing type>
+
+      Domain                    : TimeDomain or FrequencyDomain
+      Type                      : Body or Gravity
+      Measurement/Calculated    : Acceleration (measured) or AccelerationJerk (calculated) 
+                                        or Gyroscope (measured) GyroscopeJerk (calculated) 
+      Axis/Magnitude            :  X or Y or Z or Magnitude
+      Processing type           : Mean or STD or FreqMean
+    
+    
+The following activities were considered in this data collection:
+       - Walking
+       - WalkingUpstairs
+       - WalkingDownstairs
+       - Sitting
+       - Standing
+       - Laying
+
+
+```{r echo=FALSE, results='hide',warning=FALSE}
+invisible(source("run_analysis.R", verbose=FALSE))
+```
+
+
+```{r echo=FALSE,results='asis',warning=FALSE}
+invisible(library(xtable,quietly = TRUE))
+conversionDictionary<-data.frame(strippedNames)
+colnames(conversionDictionary)<-c("Variable name")
+print(xtable(conversionDictionary, align=c('l','c')),type="html")
+
+```
+
+
+

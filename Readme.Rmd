@@ -1,0 +1,106 @@
+---
+title: "Data processing explanation"
+author: "Yuri-Sh"
+date: "Friday, December 19, 2014"
+output:
+  html_document:
+    keep_md: yes
+---
+
+The processing is performed by the script run_analysis.R explained below.
+
+## Construction of a single dataset
+
+    Note: the placeholder <settype> below represents both "test" and  "train" 
+          (the partial datasets to be combined and cleaned).
+    
+    - Load the feature list (features.txt). These are the names of the variables (columns).
+    - Load activity_labels.txt. This is the conversion dictionary for 6 activity codes.
+     
+    - For each partial dataset (test, train) contruct the table
+    
+        1. Load the activity table (activity code per observation) 
+           from <settype>/y_<settype>.txt and convert the activities
+           codes to the activities names (strings) using common features conversion dictionary,
+           This is the activity column for the resepective partial dataset.
+           
+        2. Load the subject data (subject id per observation) from <settype>/subject_<settype>.txt.
+           This is the subject column for the resepective partial dataset.
+           
+        3. Load the observations from respective file <settype>/X_<settype>.txt
+           This file comprises all the measured variables (features) for each observation.
+           
+        4. Combine the columns of activities and subject with the measurements table.
+        
+        
+    - Merge each of the resulting tables into the unified data table.
+    
+## Cleaning the dataset
+
+    - Select only the columns which contain in their name mean (or meanFreq) or std
+      (ignoring the letter case).
+      Exclude from this list the columns which are functions of other columns
+      Note: these 7 columns have naming format *angle(<var1>,<var2>)*.
+      There are 79 remaining features.
+      
+    - Select only complete observations (rows) for the selected features.       
+    
+    - Convert the column (feature) names to a single tidy format according to 
+      the following convention:
+      <Domain><Type><Measurement/Calculation><Axis/Magnitude><Processing type>
+
+      Domain                    : TimeDomain or FrequencyDomain
+      Type                      : Body or Gravity
+      Measurement/Calculated    : Acceleration (measured) or AccelerationJerk (calculated) 
+                                  or Gyroscope (measured) GyroscopeJerk (calculated) 
+      Axis/Magnitude            :  X or Y or Z or Magnitude
+      Processing type           : Mean or STD or FreqMean
+             
+      
+      Additional two columns are marked **Activity** and **Subject** as described above.
+      
+      
+      In addition, the activities naming was changed to
+      
+       - Walking
+       - WalkingUpstairs
+       - WalkingDownstairs
+       - Sitting
+       - Standing
+       - Laying
+       
+      
+      
+## Creation of the final dataset
+
+      All variables are summarized (averaged)  per subject (30 subjects) and per activity (6 activities).
+      The resulting tidy dataset is saved to a file.
+      
+
+## Appendix 1: Summary of variable conversions 
+  
+```{r echo=FALSE, results='hide',warning=FALSE}
+invisible(source("run_analysis.R", verbose=FALSE))
+```
+
+
+```{r echo=FALSE,results='asis',warning=FALSE}
+invisible(library(xtable,quietly = TRUE))
+conversionDictionary<-data.frame(selFeatNames,strippedNames)
+colnames(conversionDictionary)<-c("Original variable name (raw)","Tidy variable name")
+print(xtable(conversionDictionary, align=c('l','c','c')),type="html")
+
+```
+ 
+      
+      
+
+    
+     
+      
+      
+      
+      
+      
+       
+        
